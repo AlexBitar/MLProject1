@@ -29,7 +29,7 @@ lm.fit1 = lm( formula = V281 ~., data =train1.data )
 summary(lm.fit1)
 
 pred.lm1 = predict(lm.fit1, test1.data, se.fit = TRUE)
-mse1=sum((test1.data$V281 - pred.lm1$fit)^2)/7624
+mse1=(sum((test1.data$V281 - pred.lm1$fit)^2))/7624
 mse1
 #0.1883511 
 
@@ -53,7 +53,8 @@ plot((test1.data$V281 - pred.lm1.2$fit))
 logit1 = glm( V281 ~., train1.data, family = "binomial")
 summary(logit1)
 pred.logit1 = predict(logit1,test1.data,TYPE = "response" ) 
-table(Actualvalue=test1.data$V281, Predictedvalue =pred.logit1>0.5 )
+predicted_value1 = ifelse(pred.logit1>0.5,1,0)
+table(Actualvalue=test1.data.modified.lg$V281, predicted_value1)
 
 #without v55,v60
 train1.data.modified.lg = train1.data[,-c(5,10)]
@@ -61,7 +62,9 @@ test1.data.modified.lg = test1.data[,-c(5,10)]
 logit1.2 = glm( V281 ~.,  train1.data.modified.lg , family = "binomial")
 summary(logit1.2)
 pred.logit1.2 = predict(logit1.2,test1.data.modified.lg,TYPE = "response" ) 
-table(Actualvalue=test1.data.modified.lg$V281, Predictedvalue =pred.logit1.2>0.5 )
+predicted_value2 = ifelse(pred.logit1.2>0.5,1,0)
+table(Actualvalue=test1.data.modified.lg$V281, predicted_value2)
+
 
 
 
@@ -80,7 +83,7 @@ test2.data=test.data[,features2]
 summary(train2.data)
 lm.fit2 = lm( formula = V281 ~., data =train2.data )
 summary(lm.fit2)
-#remove na features (i only did once coz it just keeps coming out idk how to fix this)
+#remove na features
 numofvariables=length(lm.fit2$coefficients)-1
 sum(is.na(lm.fit2$coefficients))
 for (i in 1:numofvariables){
@@ -106,4 +109,5 @@ logit2 = glm( V281 ~., train2.data, family = "binomial")
 summary(logit2)
 pred.logit2 = predict(logit2,test2.data,TYPE = "response" ) 
 #confusionMatrix2
-table(Actualvalue=test2.data$V281, Predictedvalue =pred.logit2>0.5 )
+predicted_value2 = ifelse(pred.logit2>0.5,1,0)
+table(Actualvalue=test1.data.modified.lg$V281, predicted_value2)
